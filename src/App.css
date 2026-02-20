@@ -1,0 +1,35 @@
+@import "tailwindcss";
+
+/* CSS global */
+
+@theme {
+  --type-first: Helvetica, Arial, sans-serif;
+  --type-second: "Spectral", Georgia;
+}
+
+body {
+  padding-top: 4rem;
+  margin: 0px;
+  color: #333;
+  font-family: var(--type-first);
+}
+
+ul,
+li {
+  padding: 0px;
+  margin: 0px;
+}
+
+button,
+input {
+  display: block;
+  font-size: 1rem;
+  font-family: var(--type-first);
+  color: #333;
+}
+
+.layout-container {
+  max-width: 50rem;
+  padding: 0 1rem;
+  margin: 0 auto;
+}
