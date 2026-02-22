@@ -17,14 +17,16 @@ const Login = () => {
 
   if (login === true) return <Navigate to="/conta" />;
   return (
-    <div>
-      <Routes>
-        <Route path="/" element={<LoginForm />} />
-        <Route path="criar" element={<LoginCreate />} />
-        <Route path="perdeu" element={<LoginPasswordLost />} />
-        <Route path="resetar" element={<LoginPasswordReset />} />
-      </Routes>
-    </div>
+    <section className="grid grid-cols-1 sm:grid-cols-2 min-h-screen gap-8 login">
+      <div className="max-w-[30rem] w-full mx-auto p-4 sm:max-w-full">
+        <Routes>
+          <Route path="/" element={<LoginForm />} />
+          <Route path="criar" element={<LoginCreate />} />
+          <Route path="perdeu" element={<LoginPasswordLost />} />
+          <Route path="resetar" element={<LoginPasswordReset />} />
+        </Routes>
+      </div>
+    </section>
   );
 };
 
