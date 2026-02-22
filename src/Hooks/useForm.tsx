@@ -4,6 +4,10 @@ const types = {
   email: {
     regex: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
     message: 'Preencha um email válido'
+  },
+  password: {
+    regex: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[$*&@#])[0-9a-zA-Z$*&@#]{8,}$/,
+    message: 'A senha precisa ter no mínimo 8 caracteres, sendo eles 1 caracter maíusculo, 1 minúsculo, 1 dígito e 1 caracter especial' 
   }
 }
 
@@ -17,7 +21,7 @@ const useForm = (type : FormField = false) => {
     if(!type) return true;
     
     if (value.length === 0) {
-      setError('Preencha um valor');
+      setError(types[type].message);
       return false;
     } else if (types[type] && !types[type].regex.test(value)) {
       setError(types[type].message);
