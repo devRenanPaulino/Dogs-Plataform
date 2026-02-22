@@ -81,6 +81,8 @@ export const UserStorage: React.FC<Props> = ({ children }) => {
         } finally {
           setLoading(false);
         }
+      } else {
+        setLogin(false);
       }
     }
     autoLogin();
