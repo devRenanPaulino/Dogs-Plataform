@@ -12,6 +12,7 @@ export interface IUserContext {
   loading: boolean;
   error: string | null;
   userLogin: (username: string, password: string) => Promise<void>;
+  userLogout: () => void;
 }
 
 export const UserContext = React.createContext<IUserContext | null>(null);

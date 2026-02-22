@@ -1,21 +1,31 @@
-import React from 'react'
-import { Routes, Route } from 'react-router-dom'
-import LoginForm from './LoginForm'
-import LoginCreate from './LoginCreate'
-import LoginPasswordLost from './LoginPasswordLost'
-import LoginPasswordReset from './LoginPasswordReset'
+import React from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
+import LoginForm from "./LoginForm";
+import LoginCreate from "./LoginCreate";
+import LoginPasswordLost from "./LoginPasswordLost";
+import LoginPasswordReset from "./LoginPasswordReset";
+import { UserContext } from "../../UserContext";
 
 const Login = () => {
+  const context = React.useContext(UserContext);
+
+  if (!context) {
+    throw new Error("Login Salvo não Existe");
+  }
+
+  const { login } = context;
+
+  if (login === true) return <Navigate to="/conta" />;
   return (
     <div>
       <Routes>
-        <Route path='/' element={<LoginForm />} />
-        <Route path='criar' element={<LoginCreate />}/>
-        <Route path='perdeu' element={<LoginPasswordLost />}/>
-        <Route path='resetar' element={<LoginPasswordReset />}/>
+        <Route path="/" element={<LoginForm />} />
+        <Route path="criar" element={<LoginCreate />} />
+        <Route path="perdeu" element={<LoginPasswordLost />} />
+        <Route path="resetar" element={<LoginPasswordReset />} />
       </Routes>
     </div>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;

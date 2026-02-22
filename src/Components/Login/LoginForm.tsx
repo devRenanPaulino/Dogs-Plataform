@@ -15,7 +15,7 @@ const LoginForm = () => {
     throw new Error("LoginForm precisa estar dentro de UserStorage");
   }
 
-  const { userLogin } = context;
+  const { userLogin, error, loading } = context;
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -31,7 +31,12 @@ const LoginForm = () => {
       <form action="" onSubmit={handleSubmit}>
         <Input label="Usuário" type="text" name="username" {...username} />
         <Input label="Senha" type="password" name="password" {...password} />
-        <Button children="Entrar" />
+        {loading ? (
+          <Button disabled>Carregando...</Button>
+        ) : (
+          <Button>Entrar</Button>
+        )}
+        {error && <p>{error}</p>}
       </form>
 
       <br />
