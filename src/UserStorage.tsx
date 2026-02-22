@@ -1,7 +1,8 @@
 import React from "react";
 import { UserContext } from "./UserContext";
 import type { IUser } from "./UserContext";
-import { TOKEN_POST, USER_GET } from "./api";
+import { TOKEN_POST, TOKEN_VALIDATE_POST, USER_GET } from "./api";
+import { useNavigate } from "react-router-dom";
 
 interface Props {
   children: React.ReactNode;
@@ -12,6 +13,7 @@ export const UserStorage: React.FC<Props> = ({ children }) => {
   const [login, setLogin] = React.useState<boolean>(false);
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
+  const navigate = useNavigate();
 
   async function getUser(token: string): Promise<void> {
     const { url, options } = USER_GET(token);
@@ -27,21 +29,67 @@ export const UserStorage: React.FC<Props> = ({ children }) => {
   }
 
   async function userLogin(username: string, password: string): Promise<void> {
-    const { url, options } = TOKEN_POST({ username, password });
-    const tokenRes = await fetch(url, options);
+    try {
+      setError(null);
+      setLoading(true);
+      const { url, options } = TOKEN_POST({ username, password });
+      const tokenRes = await fetch(url, options);
 
-    if (!tokenRes.ok) {
-      throw new Error("Erro no login");
+      if (!tokenRes.ok) {
+        throw new Error(`Error: ${tokenRes.statusText}`);
+      }
+
+      const { token }: { token: string } = await tokenRes.json();
+
+      window.localStorage.setItem("token", token);
+      await getUser(token);
+      navigate("/conta");
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("Erro desconhecido");
+      }
+      setLogin(false);
+    } finally {
+      setLoading(false);
     }
-
-    const { token }: { token: string } = await tokenRes.json();
-
-    window.localStorage.setItem("token", token);
-    await getUser(token);
   }
 
+  const userLogout = React.useCallback(async function () {
+    setData(null);
+    setError(null);
+    setLoading(false);
+    setLogin(false);
+    window.localStorage.removeItem("token");
+    navigate("/login");
+  }, [navigate]);
+
+  React.useEffect(() => {
+    async function autoLogin() {
+      const token = window.localStorage.getItem("token");
+      if (token) {
+        try {
+          setError(null);
+          setLoading(true);
+          const { url, options } = TOKEN_VALIDATE_POST(token);
+          const response = await fetch(url, options);
+          if (!response.ok) throw new Error("Token inválido");
+          await getUser(token);
+        } catch {
+          userLogout();
+        } finally {
+          setLoading(false);
+        }
+      }
+    }
+    autoLogin();
+  }, [userLogout]);
+
   return (
-    <UserContext.Provider value={{ data, login, loading, error, userLogin }}>
+    <UserContext.Provider
+      value={{ data, login, loading, error, userLogin, userLogout }}
+    >
       {children}
     </UserContext.Provider>
   );

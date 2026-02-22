@@ -4,7 +4,6 @@ import Dogs from "../Assets/dogs.svg?react";
 import styles from "./Header.module.css";
 import { UserContext } from "../UserContext";
 
-
 const Header = () => {
   const context = React.useContext(UserContext);
 
@@ -12,7 +11,7 @@ const Header = () => {
     throw new Error("Header precisa estar dentro de UserStorage");
   }
 
-  const { data } = context;
+  const { data, userLogout } = context;
 
   return (
     <header className="shadow-sm fixed w-full z-50 bg-white top-0">
@@ -21,19 +20,22 @@ const Header = () => {
           <Dogs />
         </Link>
         {data ? (
-        <Link
-          to="/conta"
-          className={`${styles.login} text-[#333] flex items-center`}
-        >
-          {data.username}
-        </Link>
+          <>
+            <Link
+              to="/conta"
+              className={`${styles.login} text-[#333] flex items-center`}
+            >
+              {data.username}
+            </Link>
+            <button onClick={userLogout}>Sair</button>
+          </>
         ) : (
           <Link
-          to="/login"
-          className={`${styles.login} text-[#333] flex items-center`}
-        >
-          Login / Criar
-        </Link>
+            to="/login"
+            className={`${styles.login} text-[#333] flex items-center`}
+          >
+            Login / Criar
+          </Link>
         )}
       </nav>
     </header>
