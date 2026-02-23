@@ -11,7 +11,7 @@ const Header = () => {
     throw new Error("Header precisa estar dentro de UserStorage");
   }
 
-  const { data, userLogout } = context;
+  const { data, } = context;
 
   return (
     <header className="shadow-sm fixed w-full z-50 bg-white top-0">
@@ -27,7 +27,6 @@ const Header = () => {
             >
               {data.username}
             </Link>
-            <button onClick={userLogout}>Sair</button>
           </>
         ) : (
           <Link
